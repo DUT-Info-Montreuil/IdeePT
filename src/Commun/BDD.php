@@ -6,7 +6,7 @@ abstract class BDD
     public function __construct()
     {
         if (self::$pdo === null) {
-            $fichier = __DIR__ . '/../../data/.sql';
+            $fichier = __DIR__ . '/../../base_de_donnees/IdeePT.sqlite';
             if (!is_file($fichier)) {
                 die('Base de données introuvable : ' . $fichier);
             }
