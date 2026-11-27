@@ -3,8 +3,7 @@ require_once __DIR__ . '/../src/Idee/Model/IdeeRepository.php';
 
 $repository = new IdeeRepository;
 
-$tag = [2];
-$sansTag = [];
+$tag = [1,2];
 $request = $repository->findByThemeAndTag( "Projet SAÉ", $tag);
 
 echo '<pre>';
