@@ -7,18 +7,26 @@ class IdeeRepository extends BDD
     public function findByThemeAndTag(string $theme, array $tag)
     {
         if (empty($tag)){
-        $requete = self::$pdo->prepare('SELECT id_idee, titre, description From idee Join theme on idee.id_theme = theme.id_theme Where nom = :theme;');
+        $requete = self::$pdo->prepare('SELECT idee.id_idee, titre, description From idee Join theme on idee.id_theme = theme.id_theme Where nom = :theme;');
         $requete->execute(['theme' => $theme]);
         } else{
-        $requete = self::$pdo->prepare('SELECT id_idee, titre, description From idee Join theme on idee.id_theme = theme.id_theme Join etiquette on idee.id_idee = etiquette.id_idee Where nom = :theme And id_tag in (:liste) Group by idee.id_idee Having count(*) = :tailleListe; ' );
-        $list = implode(',',$tag);
-        $requete->execute(['theme' => $theme, 'liste' => $liste, 'tailleListe' => count($tag)]);
+        $placeholder = [];
+        foreach ($tag as $i => $valeur){
+            $placeholder[] = ':tag'.$i;
+        }
+        $list = implode(",",$placeholder) ;
+        $requete = self::$pdo->prepare('SELECT idee.id_idee, titre, description From idee Join theme on idee.id_theme = theme.id_theme Join etiquette on idee.id_idee = etiquette.id_idee Where nom = :theme And id_tag in ('.$list.');' );
+        $param = ['theme' => $theme];
+        foreach ($tag as $i => $valeur){
+            $param['tag'.$i] = $valeur;
+        }
+        $requete->execute($param);
         }
         return $requete;
     }
 
     public function pacourirTheme( $requete){
         $ligne = $requete->fetch(PDO::FETCH_ASSOC);
-        return $ligne === false ? null : Idee::versIut($ligne);
+        return $ligne === false ? null : Idee::ligne($ligne);
     }
 }

@@ -6,13 +6,13 @@ class Idee
         private int $id,
         private string $titre,
         private string $description,
-    )
+    ){}
 
-    public function getId(){return $this->id}
-    public function getTitre(){return $this->titre}
-    public function getDescription(){return $this->description}
+    public function getId(){return $this->id;}
+    public function getTitre(){return $this->titre;}
+    public function getDescription(){return $this->description;}
 
-    private static function ligne(array $ligne): Idee
+    public static function ligne(array $ligne): Idee
     {
         return new self((int) $ligne['id_idee'], $ligne['titre'], $ligne['description']);
     }
